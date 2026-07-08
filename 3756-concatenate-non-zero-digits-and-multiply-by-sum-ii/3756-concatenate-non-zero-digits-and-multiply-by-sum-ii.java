@@ -1,0 +1,84 @@
+
+class Solution {
+    static final int MOD = 1_000_000_007;
+
+    public int[] sumAndMultiply(String s, int[][] queries) {
+        int n = s.length();
+
+        ArrayList<Integer> digits = new ArrayList<>();
+        ArrayList<Integer> pos = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int d = s.charAt(i) - '0';
+            if (d != 0) {
+                digits.add(d);
+                pos.add(i);
+            }
+        }
+
+        int m = digits.size();
+
+        long[] prefixNum = new long[m + 1];
+        long[] pow10 = new long[m + 1];
+        int[] prefixSum = new int[m + 1];
+
+        pow10[0] = 1;
+        for (int i = 1; i <= m; i++)
+            pow10[i] = (pow10[i - 1] * 10) % MOD;
+
+        for (int i = 0; i < m; i++) {
+            prefixNum[i + 1] = (prefixNum[i] * 10 + digits.get(i)) % MOD;
+            prefixSum[i + 1] = prefixSum[i] + digits.get(i);
+        }
+
+        int[] next = new int[n];
+        int[] prev = new int[n];
+
+        Arrays.fill(next, -1);
+        Arrays.fill(prev, -1);
+
+        int idx = 0;
+        for (int i = 0; i < n; i++) {
+            while (idx < m && pos.get(idx) < i)
+                idx++;
+            if (idx < m)
+                next[i] = idx;
+        }
+
+        idx = m - 1;
+        for (int i = n - 1; i >= 0; i--) {
+            while (idx >= 0 && pos.get(idx) > i)
+                idx--;
+            if (idx >= 0)
+                prev[i] = idx;
+        }
+
+        int[] ans = new int[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int l = next[queries[i][0]];
+            int r = prev[queries[i][1]];
+
+            if (l == -1 || r == -1 || l > r) {
+                ans[i] = 0;
+                continue;
+            }
+
+            int len = r - l + 1;
+
+            long x = (prefixNum[r + 1]
+                    - prefixNum[l] * pow10[len] % MOD
+                    + MOD) % MOD;
+
+            int sum = prefixSum[r + 1] - prefixSum[l];
+
+            ans[i] = (int) (x * sum % MOD);
+        }
+
+        return ans;
+    }
+}
+
+// Synced seamlessly with LeetHub Pro
+// Pro features: https://bit.ly/leethubpro | Free version: https://bit.ly/leethubv4
+// Get it here: https://chromewebstore.google.com/detail/bcilpkkbokcopmabingnndookdogmbna
