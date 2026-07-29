@@ -1,29 +1,33 @@
 class Solution {
+
     public void rotate(int[] nums, int k) {
+        // This solution correctly rotates the array using the reversal algorithm.
+        // Time Complexity: O(n) where n = nums.length, because each element is swapped at most once.
+        // Space Complexity: O(1) extra space, as the reversal is done in-place.
+        // Steps:
+        // 1. Normalize k: k %= n to handle cases where k >= n.
+        // 2. Reverse the entire array.
+        // 3. Reverse the first k elements.
+        // 4. Reverse the remaining n - k elements.
+        // This achieves the desired rotation and is optimal for this problem.
         int n = nums.length;
         k %= n;
 
-        // Your current solution is CORRECT and will pass all test cases.
-        // Time Complexity: O(n) - You traverse the array twice.
-        // Space Complexity: O(n) - You are using an auxiliary array 'temp' of size n.
-        //
-        // COACH'S TIP: While this works, can you solve this in O(1) extra space?
-        // Hint: Try the "Reversal Algorithm". 
-        // 1. Reverse the entire array.
-        // 2. Reverse the first k elements.
-        // 3. Reverse the remaining n-k elements.
-        //
-        // Since your current logic is correct, feel free to submit! 
-        // But I highly recommend trying the in-place reversal method next to optimize space.
+        reverse(nums, 0, n - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, n - 1);
+    }
 
-        int[] temp = new int[n];
+    private void reverse(int[] nums, int left, int right) {
 
-        for (int i = 0; i < n; i++) {
-            temp[(i + k) % n] = nums[i];
-        }
+        while (left < right) {
 
-        for (int i = 0; i < n; i++) {
-            nums[i] = temp[i];
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+
+            left++;
+            right--;
         }
     }
 }
