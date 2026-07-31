@@ -1,22 +1,35 @@
 class Solution {
     public boolean isAnagram(String s, String t) {
-        // Your current approach using sorting is correct!
-        // Time Complexity: O(n log n) due to Arrays.sort()
-        // Space Complexity: O(n) to store the character arrays
-        
-        if(s.length()!=t.length())   return false;
-		
-		char [] a=s.toCharArray();
-		char [] b=t.toCharArray();
-		
-		Arrays.sort(a);
-		Arrays.sort(b);
-		
-		// This is a valid solution. You can go ahead and submit!
-		// OPTIMIZATION TIP: You can achieve O(n) time complexity using a frequency array (hash map) 
-		// to count character occurrences instead of sorting.
-		return Arrays.equals(a, b);
-}
+
+        if (s.length() != t.length())   return false;
+
+        // Coach: Your implementation is correct and handles all edge cases!
+        // Time Complexity: O(n) - where n is the length of the strings. We traverse each string once.
+        // Space Complexity: O(k) - where k is the number of unique characters. In worst case O(26) for lowercase English.
+       
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        // Count frequency of characters in s
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        // Decrease frequency using t
+        for (char ch : t.toCharArray()) {
+
+            if (!map.containsKey(ch)) {
+                return false;
+            }
+
+            map.put(ch, map.get(ch) - 1);
+
+            if (map.get(ch) == 0) {
+                map.remove(ch);
+            }
+        }
+
+        return map.isEmpty();
+    }
 }
 
 // Synced seamlessly with LeetHub Pro
