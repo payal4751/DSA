@@ -1,22 +1,22 @@
 class Solution {
     public boolean isAnagram(String s, String t) {
-        if(s.length()!=t.length()){
-            return false;
-        }
-        int [] freq=new int [26];
+        // Your current approach using sorting is correct!
+        // Time Complexity: O(n log n) due to Arrays.sort()
+        // Space Complexity: O(n) to store the character arrays
+        
+        if(s.length()!=t.length())   return false;
 		
-		for(int i=0;i<s.length();i++) {
-			freq[s.charAt(i)-'a']++;
-			freq[t.charAt(i)-'a']--;
-		}
+		char [] a=s.toCharArray();
+		char [] b=t.toCharArray();
 		
-		for(int count : freq) {
-			if(count!=0) {
-				return false;
-			}
-		}
-		return true;
-    }
+		Arrays.sort(a);
+		Arrays.sort(b);
+		
+		// This is a valid solution. You can go ahead and submit!
+		// OPTIMIZATION TIP: You can achieve O(n) time complexity using a frequency array (hash map) 
+		// to count character occurrences instead of sorting.
+		return Arrays.equals(a, b);
+}
 }
 
 // Synced seamlessly with LeetHub Pro
